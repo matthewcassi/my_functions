@@ -155,9 +155,9 @@ def bar_box(df, x_col, y_col, log=False):
     else:
         plt.subplot(1,2,1)
         sns.boxplot(x=df[x_col], y=df[y_col].dropna(),orient='v',color='lightblue')
-        plt.title('Bar Plot of ' + x_col + ' and Log Tranform of ' + y_col)
+        plt.title('Bar Plot of ' + x_col + ' and ' + y_col)
         plt.xlabel(x_col)
-        plt.ylabel('Log Transform of ' + y_col)
+        plt.ylabel(y_col)
 
         plt.subplot(1,2,2)
         pd.value_counts(df[x_col].dropna()).plot.bar(color='lightblue')
