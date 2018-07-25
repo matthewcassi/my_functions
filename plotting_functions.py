@@ -3,20 +3,15 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-def object_bar_plots(df):
+def object_bar_plots(df, col):
     '''
-    Function takes a data frame
-    Dataframe is subsetted by taking only the columns with a dtype of 'object'
-    Each column is then used to create a bar plot of the value counts
+    Function takes a data frame and a column
+    The column is then used to create a bar plot of the value counts
     '''
-    objects = df.select_dtypes(include='object')
-    cols = objects.columns
-    for i in cols:
-        pd.value_counts(df[i].dropna()).plot.bar()
-        plt.title('Value Counts for ' + i)
-        plt.ylabel('Count')
-        plt.show()
-        print('-----------------------------------------------')
+    pd.value_counts(df[col].dropna()).plot.bar()
+    plt.title('Value Counts for ' + i)
+    plt.ylabel('Count')
+    plt.show()
 
 def histogram(df, column, log=False):
     '''
@@ -47,10 +42,15 @@ def boxplot(df, column, log=False):
     plt.show()
 
 def scatterplot(df, x_var, y_var, log=False):
+    '''
+    Function takes a dataframe, x-axis feature, y-axis feature
+    (dependent variable), and a boolean for the log transform of the dependent
+    variable. The function then creates a scatterplot of the two features.
+    '''
     plt.figure(figsize=(15,9))
     if sum(df[y_var].notnull()) == sum(df[x_var].notnull()):
         if log == True:
-            plt.scatter(x=df[x_var].dropna(), y=df[y_var].dropna().apply(np.log), alpha=0.3) 
+            plt.scatter(x=df[x_var].dropna(), y=df[y_var].dropna().apply(np.log), alpha=0.3)
             plt.title('Scatter Plot of ' + x_var + ' and Log Tranform of ' + y_var)
             plt.xlabel(x_var)
             plt.ylabel('Log Transform of ' + y_var)
@@ -72,7 +72,7 @@ def scatterplot(df, x_var, y_var, log=False):
             plt.xlabel(x_var)
             plt.ylabel(y_var)
     plt.show()
-    
+
 def heatmap(df):
     '''
     Function takes in a dataframe and creates a heatmap for all of the numerical features in the dataframe
@@ -91,31 +91,79 @@ def heatmap(df):
     # Draw the heatmap with the mask and correct aspect ratio
     sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0, linewidths=.5, cbar_kws={"shrink": .5}, annot=True)
     plt.show()
-    
+
 def cat_barplot(df, x_col, y_col, log=False):
+    '''
+    Function takes a dataframe, x-axis feature, y-axis feature
+    (dependent variable), and a boolean for the log transform of the dependent
+    variable. The function then creates a barplot of the y-feature based on
+    the x-feature.
+    '''
     plt.figure(figsize=(17,9))
     if log == True:
-        sns.barplot(y=df[x_col], x=df[y_col].dropna().apply(np.log),orient='h',ci=None,palette='Blues_d')
+        sns.barplot(y=df[x_col], x=df[y_col].dropna().apply(np.log),orient='h',ci=None,color='lightblue')
         plt.title('Bar Plot of ' + x_col + ' and Log Tranform of ' + y_col)
         plt.xlabel()
         plt.ylabel('Log Transform of ' + y_col)
     else:
-        sns.barplot(y=df[x_col].dropna(), x=df[y_col].dropna(),orient='h',ci=None,palette='Blues_d')
+        sns.barplot(y=df[x_col].dropna(), x=df[y_col].dropna(),orient='h',ci=None,color='lightblue')
         plt.title('Bar Plot of ' + x_col + ' and ' + y_col)
         plt.xlabel(x_col)
         plt.ylabel(y_col)
     plt.show()
 
 def cat_boxplot(df, x_col, y_col, log=False):
+    '''
+    Function takes a dataframe, x-axis feature, y-axis feature
+    (dependent variable), and a boolean for the log transform of the dependent
+    variable. The function then creates a boxplot of the y-feature based on
+    the x-feature.
+    '''
     plt.figure(figsize=(17,9))
     if log == True:
-        sns.boxplot(x=df[x_col], y=df[y_col].dropna().apply(np.log),orient='v')
+        sns.boxplot(x=df[x_col], y=df[y_col].dropna().apply(np.log),orient='v',color='lightblue')
         plt.title('Bar Plot of ' + x_col + ' and Log Tranform of ' + y_col)
         plt.xlabel(x_col)
         plt.ylabel('Log Transform of ' + y_col)
     else:
-        sns.boxplot(x=df[x_col].dropna(), y=df[y_col].dropna(),orient='v')
+        sns.boxplot(x=df[x_col].dropna(), y=df[y_col].dropna(),orient='v',color='lightblue')
         plt.title('Bar Plot of ' + x_col + ' and ' + y_col)
         plt.xlabel(x_col)
         plt.ylabel(y_col)
+    plt.show()
+
+def bar_box(df, x_col, y_col, log=False):
+    '''
+    Function takes a dataframe, x-axis feature, y-axis feature
+    (dependent variable), and a boolean for the log transform of the dependent
+    variable. The function then creates a boxplot of the y-feature based on
+    the x-feature and a value count barplot of the x-feature.
+    '''
+    plt.figure(figsize=(20,9))
+    if log == True:
+        plt.subplot(1,2,1)
+        sns.boxplot(x=df[x_col], y=df[y_col].dropna().apply(np.log),orient='v',color='lightblue')
+        plt.title('Bar Plot of ' + x_col + ' and Log Tranform of ' + y_col)
+        plt.xlabel(x_col)
+        plt.ylabel('Log Transform of ' + y_col)
+
+        plt.subplot(1,2,2)
+        pd.value_counts(df[x_col].dropna()).plot.bar(color='lightblue')
+        plt.title('Value Counts for ' + x_col)
+        plt.ylabel('Count')
+        plt.xticks(rotation=0)
+    else:
+        plt.subplot(1,2,1)
+        sns.boxplot(x=df[x_col], y=df[y_col].dropna(),orient='v',color='lightblue')
+        plt.title('Bar Plot of ' + x_col + ' and Log Tranform of ' + y_col)
+        plt.xlabel(x_col)
+        plt.ylabel('Log Transform of ' + y_col)
+
+        plt.subplot(1,2,2)
+        pd.value_counts(df[x_col].dropna()).plot.bar(color='lightblue')
+        plt.title('Value Counts for ' + x_col)
+        plt.xticks(rotation=0)
+        plt.ylabel('Count')
+
+    plt.tight_layout()
     plt.show()
