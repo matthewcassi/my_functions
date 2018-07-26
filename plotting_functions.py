@@ -47,7 +47,7 @@ def scatterplot(df, x_var, y_var, log=False):
     (dependent variable), and a boolean for the log transform of the dependent
     variable. The function then creates a scatterplot of the two features.
     '''
-    plt.figure(figsize=(15,9))
+    plt.figure(figsize=(12,6))
     if sum(df[y_var].notnull()) == sum(df[x_var].notnull()):
         if log == True:
             plt.scatter(x=df[x_var].dropna(), y=df[y_var].dropna().apply(np.log), alpha=0.3)
@@ -99,7 +99,7 @@ def cat_barplot(df, x_col, y_col, log=False):
     variable. The function then creates a barplot of the y-feature based on
     the x-feature.
     '''
-    plt.figure(figsize=(17,9))
+    plt.figure(figsize=(12,7))
     if log == True:
         sns.barplot(y=df[x_col], x=df[y_col].dropna().apply(np.log),orient='h',ci=None,color='lightblue')
         plt.title('Bar Plot of ' + x_col + ' and Log Tranform of ' + y_col)
@@ -119,7 +119,7 @@ def cat_boxplot(df, x_col, y_col, log=False):
     variable. The function then creates a boxplot of the y-feature based on
     the x-feature.
     '''
-    plt.figure(figsize=(17,9))
+    plt.figure(figsize=(13,7))
     if log == True:
         sns.boxplot(x=df[x_col], y=df[y_col].dropna().apply(np.log),orient='v',color='lightblue')
         plt.title('Bar Plot of ' + x_col + ' and Log Tranform of ' + y_col)
@@ -139,7 +139,7 @@ def bar_box(df, x_col, y_col, log=False):
     variable. The function then creates a boxplot of the y-feature based on
     the x-feature and a value count barplot of the x-feature.
     '''
-    plt.figure(figsize=(20,9))
+    plt.figure(figsize=(20,7))
     if log == True:
         plt.subplot(1,2,1)
         sns.boxplot(x=df[x_col], y=df[y_col].dropna().apply(np.log),orient='v',color='lightblue')
@@ -167,3 +167,5 @@ def bar_box(df, x_col, y_col, log=False):
 
     plt.tight_layout()
     plt.show()
+
+		
