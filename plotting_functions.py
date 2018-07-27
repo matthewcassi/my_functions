@@ -47,7 +47,6 @@ def scatterplot(df, x_var, y_var, log=False):
     (dependent variable), and a boolean for the log transform of the dependent
     variable. The function then creates a scatterplot of the two features.
     '''
-    plt.figure(figsize=(12,6))
     if sum(df[y_var].notnull()) == sum(df[x_var].notnull()):
         if log == True:
             plt.scatter(x=df[x_var].dropna(), y=df[y_var].dropna().apply(np.log), alpha=0.3)
@@ -168,4 +167,46 @@ def bar_box(df, x_col, y_col, log=False):
     plt.tight_layout()
     plt.show()
 
-		
+def scatter_hist(df, x_col, y_col, log=False):
+	plt.figure(figsize=(20,9))
+	if sum(df[y_col].notnull()) == sum(df[x_col].notnull()):
+		if log == True:
+			plt.subplot(1,2,1)
+			plt.scatter(x=df[x_col].dropna(), y=df[y_col].dropna().apply(np.log), alpha=0.3)
+			plt.title('Scatter Plot of ' + x_col + ' and Log Tranform of ' + y_col)
+			plt.xlabel(x_col)
+			plt.ylabel('Log Transform of ' + y_col)
+
+			plt.subplot(1,2,2)
+			histogram(df, x_col, True)
+		else:
+			plt.subplot(1,2,1)
+			plt.scatter(x=df[x_col].dropna(), y=df[y_col].dropna(), alpha=0.3)
+			plt.title('Scatter Plot of ' + x_col + ' and ' + y_col)
+			plt.xlabel(x_col)
+			plt.ylabel(y_col)
+
+			plt.subplot(1,2,2)
+			histogram(df, x_col, False)
+	else:
+		drops = df[[x_col,y_col]].dropna()
+		if log == True:
+			plt.subplot(1,2,2)
+			plt.scatter(x=drops[x_col].dropna(), y=drops[y_col].dropna().apply(np.log), alpha=0.3)
+			plt.title('Scatter Plot of ' + x_col + ' and Log Tranform of ' + y_col)
+			plt.xlabel(x_col)
+			plt.ylabel('Log Transform of ' + y_col)
+
+			plt.subplot(1,2,2)
+			histogram(df, x_col, True)
+		else:
+			plt.subplot(1,2,1)
+			plt.scatter(x=drops[x_col].dropna(), y=drops[y_col].dropna(), alpha=0.3)
+			plt.title('Scatter Plot of ' + x_col + ' and ' + y_col)
+			plt.xlabel(x_col)
+			plt.ylabel(y_col)
+			
+			plt.subplot(1,2,2)
+			histogram(df, x_col, False)			
+	plt.tight_layout()
+	plt.show()	
